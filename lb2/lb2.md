@@ -128,7 +128,7 @@ Diese Dokumentation beinhaltet das Automatisieren eines Webservers mit dem Tool 
 ### Test
 
     Wenn es funktoniert wie es sollte, kann nach dem Befehl "vagrant up" im Browser "localhost:8080" oder "127.0.0.1:8080" eingegeben werden und es sollte folgende Seite erscheinen:
-> [Apache Website](/Users/Albin/Desktop/Apache_Website.PNG "Website")
+> [Test](/Users/Albin/Desktop/Apache_Website.PNG "Apache")
 ---------------------------
 
 ### Reflektion
