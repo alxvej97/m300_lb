@@ -12,6 +12,9 @@ config.vm.provider "virtualbox" do |vb|
   apt-get install -y apache2
   sudo apt -y install apache2 php libapache2-mod-php
 
+  sudo apt-get update
+  sudo apt-get install libcap2-bin wireshark
+
   sudo apt install ufw
   sudo ufw default deny incoming
   sudo ufw default allow outgoing
