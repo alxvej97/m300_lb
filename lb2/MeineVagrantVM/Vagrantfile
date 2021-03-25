@@ -1,26 +1,16 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/trusty64"
-
-
+  config.vm.box = "ubuntu/xenial64"
   config.vm.network "forwarded_port", guest: 80, host: 8080
-
-  #config.vm.synced_folder "../data", "/vagrant_data
-  
-  #Provider-specific configuration s
-  
-  config.vm.provider "virtualbox" do |vb|
-  
-  vb.gui = true
-  
+  config.vm.synced_folder ".", "/var/www/html" 
+config.vm.provider "virtualbox" do |vb|
   vb.memory = "4096"
   end
 
- 
+  config.vm.provision "file", source: "../PHP-Website/index.php", destination: "/var/www/html/index.php"
   config.vm.provision "shell", inline: <<-SHELL
   apt-get update
   apt-get install -y apache2
+  sudo apt -y install apache2 php libapache2-mod-php
+
   SHELL
 end
