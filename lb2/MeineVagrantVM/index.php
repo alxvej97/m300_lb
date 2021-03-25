@@ -16,7 +16,8 @@
 
 <body>
 
-Hallo das ist der Webserver vom M300
+<h1>Hallo das ist mein M300 Webserver</h1>
+<h2>Leider hat es zeitlich nicht gereicht die Seite weiter zu gestalten</h2>
 
 </body>
 
