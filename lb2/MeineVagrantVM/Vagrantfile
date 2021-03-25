@@ -15,6 +15,12 @@ config.vm.provider "virtualbox" do |vb|
   sudo apt-get update
   sudo apt-get install libcap2-bin wireshark
 
+  sudo apt-get update
+  sudo apt install software-properties-common
+  sudo add-apt-repository ppa:deadsnakes/ppa
+  sudo apt-get update
+  sudo apt install python3.8
+
   sudo apt install ufw
   sudo ufw default deny incoming
   sudo ufw default allow outgoing
