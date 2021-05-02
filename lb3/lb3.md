@@ -33,71 +33,91 @@ Es können auf dem MySQL-Server (localhost:8080) Datenbanken erstellt werden. Di
 ---------------------------
 
 
-
-
-### Grafische Übersicht
- 
-    sudo apt install ufw 
-  >*Mit dieser Zeile wird die ufw installiert, falls sie es nicht bereits ist.*
-
-    sudo ufw default deny incoming
-  >*Mit dieser Zeile  wird eingestellt, dass alles was hereinkommt, geblockt werden soll*
-
-    sudo ufw default allow outgoing
-  >*Mit dieser Zeile wird eingestellt, dass alles was rausgeht, erlaubt werden soll*
-
-    sudo ufw allow ssh
-  >*Mit dieser Zeile werden eingehende ssh verbindungen zugelassen*
-
-    sudo ufw allow 80
-  >*Mit dieser Zeile wird der Port 80 zugelassen*
-
-    sudo ufw allow 8080
-  >*Mit dieser Zeile wird der Port 8080 zugelassen*
-   
-    sudo ufw allow 'Apache'
-  >*Mit dieser Zeile wird Apache zugelassen*
-
-    sudo ufw --force enable
-  >*Mit diesem befehl wird die Firewall aktiviert*
-
-    sudo ufw --force status verbose
-  >*Mit dieser Zeile werden die geänderten Einstellungen angezeigt*
-
----------------------------
-
 ### Code Beschreibung
 
 #### PHP-File
 
-     sudo apt-get update
-     sudo apt-get install libcap2-bin wireshark
-  >*Mit dieser Zeile werden Paketlisten neu eingelesen und aktualisiert. Zusätzlich wird Wireshark installiert*
-  
+     <?php
+  >*Die Scriptsprache wird definiert*
+
+     echo "Sie befinden sich nun auf meinem Docker lb3 container";
+  >*Es wird eine Ausgabe definiert, welche auf der Seite angezeigt wird*
+
+     $sql = "INSERT INTO Checkliste (Handlung, Status) VALUES('PHP-Container', 'Erledigt')";
+     $result = $mysqli->query($sql);
+  >*Es werden die gewünschten Werte in die entsprechenden Spalten der entsprechenden Tabelle eingefügt*
+
+     foreach ($users as $user) {
+     echo "<br>";
+     echo $user->Handlung . " " . $user->Status;
+     echo "<br>";
+  >*Es werden die Ausgaben definiert sowie nach jeder Ausgabe ein Absatz eingefügt*
+
 #### Docker-Compse File
 
-     sudo apt-get update
-     sudo apt install software-properties-common
-     sudo add-apt-repository ppa:deadsnakes/ppa
-     sudo apt-get update
-     sudo apt install python3.8
-  >*Mit dieser Zeile werden Paketlisten neu eingelesen und aktualisiert. Zusätzlich wird python installiert*
+     version: '3.1'
+  >*Die docker-compose Version wird definiert*
+
+    services:
+  >*Die zu erstellenden Container (Services) werden definiert*
+
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+        volumes:
+            - ./src:/var/www/html/
+  >*Der PHP-Container mithilfe des Dockerfiles erstellt (siehe Dockerfile). Die Portweiterleitung das Kopieren des lokalen Verzeichnisses in das des Containers ist auch definiert.*
+
+    db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: example
+        volumes:
+            - mysql-data:/var/lib/mysql
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+
+  volumes:
+    mysql-data:
+  >*Es wird ein Datenbankdienst (MySQL) hinzugefügt. Es werden Befehle für die Passwortabfrage, sowie für eine Neustartrichtlinie definiert. Das Root Passwort für die Anmeldung ist auf Example gesetzt. Die Portweiterleitung wurde auch hinzugefügt (localhost:8080) sowie die volumes damit die Datenbank bestehen bleibt.*  
 
 #### Dockerfile
 
+    FROM php:7.4-apache
+>*Es wird definiert, dass das Image 7.4 von PHP-Apache für den Container verwendet werden soll.*
+
+    RUN docker-php-ext-install mysqli
+>*Es wird definiert, dass MySQL Extensions im Container heruntergeladen und ausgeführt werden sollen.*
 
 ---------------------------
 
 ### Sicherheitsaspekte
+|Sicherheitsmerkmal |Begründung                                                             |
+|---------------------------|---------------------------------------------------------------|
+|Benutzer & Passwort        |Zugriff auf Datenbank nur über Benutzer mit PW möglich         |
 
-    Wenn es funktoniert wie es sollte, kann nach dem Befehl "vagrant up" im Browser "localhost:8080" oder "127.0.0.1:8080" eingegeben werden und es sollte folgende Seite erscheinen:
-> [Test](/Users/Albin/Desktop/Apache_Website.PNG "Apache")
 ---------------------------
 
 ### Test
 
-    Wenn es funktoniert wie es sollte, kann nach dem Befehl "vagrant up" im Browser "localhost:8080" oder "127.0.0.1:8080" eingegeben werden und es sollte folgende Seite erscheinen:
-> [Test](/Users/Albin/Desktop/Apache_Website.PNG "Apache")
+#### Container welche runnen sind
+Beweis: ![Container](/lb3/images/Container.png "Container")
+
+#### Datenbanken auf localhost:8080
+Beweis: ![Container](/lb3/images/Datenbanken_erstellt.png "Container")
+
+#### Webseite auf localhost:80
+Beweis: ![Container](/lb3/images/PHP-Webseite.png "Container")
+
+
 ---------------------------
 
 ### Quellen
