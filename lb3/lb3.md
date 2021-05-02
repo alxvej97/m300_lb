@@ -1,80 +1,41 @@
 > *M300 / Albin Vejseli*
 
-# **LB2- Apache mit einer PHP-Webseite**
+# **LB3- Docker-Umbegung mit PHP, Apache & MySQL**
 
 ## Inhaltsverzeichnis
 
 
 
-- *Einleitungswort*
-- *Vagrant*
-    - *Codedokumantation VM*
-    - *Codedokumantation Apache / php*
-    - *Codedokumantation Firewall*
-- *Erweiterungen*
-     - *Installation Wireshark*
-     - *Installation Python*
-- *Test*
-- *Reflektion*
+- *Service Beschreibung*
+- *Service Anwendung*
+- *Grafische Übersicht*
+- *Code Beschreibung*
+    - *PHP-File*
+    - *Docker-Compose File*
+    - *Dockerfile*
+- *Sicherheitsaspekte*
+- *Testfälle*
 - *Quellen*
 
 ---------------------
 
 
+### Service Beschreibung                
+In der nachfolgenden Dokumentation wird eine Docker-Umgebung aufgezeigt, welche die Services PHP, MySQL & Apache automatisiert.
 
-### Einleitungswort
-Diese Dokumentation beinhaltet das Automatisieren eines Webservers mit dem Tool Vagrant. 
-
---------------------
-
-
-### Vagrant                
-
-#### Codedokumantation VM
-
-     config.vm.box = "ubuntu/xenial64"
-  >*Mit dieser Zeile wird definiert, welches Image verwendet werden soll.*
-
-     config.vm.network "forwarded_port", guest: 80, host: 8080
-  >*Mit dieser Zeile werden die geöffneten Ports konfiguriert.*
-
-     config.vm.synced_folder ".", "/var/www/html"
-  >*Mit dieser Zeile wird die eventuelle Synchronisation des Ordners definiert.*
-
-
-     config.vm.provider "virtualbox" do |vb|
-  >*Mit dieser Zeile wird der Provider definiert.*
-
-     
-     vb.memory = "4096"
-  >*Mit dieser Zeile wird RAM der VM zugewiesen.*
-
-     config.vm.provision "file", source: "../Website/index.php", destination: "/var/www/html/index.php"
-  >*Mit dieser Zeile definieren wir den Destination folder von der lokal erstellten Datei index.php*
-
-     config.vm.provision "shell", inline: <<-SHELL
-  >*Das ist die Endzeile. Alles nachfolgende wird automatisch in der VM ausgeführt.*
 ---------------------------
 
 
 
-#### Codedokumantation Apache / php
-
-     apt-get update
-  >*Mit dieser Zeile werden Paketlisten neu eingelesen und aktualisiert.*
-
-     apt-get install -y apache2
-  >*Mit dieser Zeile wird apache2 installiert.*
-
-     sudo apt -y install apache2 php libapache2-mod-php
-  >*Mit dieser Zeile wird php installiert.*
+### Service Anwendung
+Es können auf dem MySQL-Server (localhost:8080) Datenbanken erstellt werden. Die entsprechenden Infos der Datenbank, werden auf dem Apache-WebServer (localhost:80) dargestellt. Die Seite welche diese Infos anzeigt kann mithilfe des PHP-Files bearbeitet werden.
 
 ---------------------------
 
 
 
 
-#### Codedokumantation Firewall
+### Grafische Übersicht
  
     sudo apt install ufw 
   >*Mit dieser Zeile wird die ufw installiert, falls sie es nicht bereits ist.*
@@ -105,15 +66,15 @@ Diese Dokumentation beinhaltet das Automatisieren eines Webservers mit dem Tool 
 
 ---------------------------
 
-### Erweiterungen
+### Code Beschreibung
 
-#### Installation Wireshark
+#### PHP-File
 
      sudo apt-get update
      sudo apt-get install libcap2-bin wireshark
   >*Mit dieser Zeile werden Paketlisten neu eingelesen und aktualisiert. Zusätzlich wird Wireshark installiert*
   
-#### Installation Python
+#### Docker-Compse File
 
      sudo apt-get update
      sudo apt install software-properties-common
@@ -122,7 +83,15 @@ Diese Dokumentation beinhaltet das Automatisieren eines Webservers mit dem Tool 
      sudo apt install python3.8
   >*Mit dieser Zeile werden Paketlisten neu eingelesen und aktualisiert. Zusätzlich wird python installiert*
 
+#### Dockerfile
 
+
+---------------------------
+
+### Sicherheitsaspekte
+
+    Wenn es funktoniert wie es sollte, kann nach dem Befehl "vagrant up" im Browser "localhost:8080" oder "127.0.0.1:8080" eingegeben werden und es sollte folgende Seite erscheinen:
+> [Test](/Users/Albin/Desktop/Apache_Website.PNG "Apache")
 ---------------------------
 
 ### Test
@@ -131,12 +100,8 @@ Diese Dokumentation beinhaltet das Automatisieren eines Webservers mit dem Tool 
 > [Test](/Users/Albin/Desktop/Apache_Website.PNG "Apache")
 ---------------------------
 
-### Reflektion
-    Ich habe keinerlei Kentnisse gehabt in Sachen Vagrant und Markdown. Ich verstehe die Idee dahinter und konnte mein Wissen, durch Informieren verschiedener Quellen und natürlich den Unterrichtsmaterialien, in diesen Bereichen erweitern. Das Projekt verlief mit Problemen, worauf aber im Internet sehr viele Antworten stehen. Da die Zeit sehr knapp wurde konnte ich nichts grösseres machen. 
----------------------------
-
 ### Quellen
-- <https://phoenixnap.com/kb/how-to-install-python-3-ubuntu>
-- <https://github.com/alxvej97/m300_lb> "Mein Repository"
-- <https://app.vagrantup.com/boxes/search?utf8=%E2%9C%93&sort=downloads&provider=&q=ubuntu%2Ftrusty64> "UbuntuBox"
-- <https://stackoverflow.com/questions/4181861/message-src-refspec-master-does-not-match-any-when-pushing-commits-in-git> "Stackflow Lösungsvorschläge"
+- <https://hub.docker.com/_/mysql> "MySQL"  
+- <https://hub.docker.com/_/php> "PHP"  
+- <https://stackoverflow.com/questions/4567688/problems-with-a-php-shell-script-could-not-open-input-file> "Troubleshooting"  
+- <https://askubuntu.com/questions/949401/how-to-fix-could-not-open-input-file-in-php-cli-7-0> "Troubleshooting"
